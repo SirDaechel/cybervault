@@ -17,7 +17,9 @@ const SeedPhrase: React.FC<SeedPhraseProps> = ({ seedPhrase }) => {
   return (
     <section>
       <div className="flex flex-col gap-24 justify-between">
-        <p className="text-xl font-medium text-center">"{seedPhrase}"</p>
+        <p className="text-xl font-medium text-center">
+          &quot;{seedPhrase}&quot;
+        </p>
         <div className="w-full flex items-center justify-center">
           <button
             type="button"
