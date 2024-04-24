@@ -1,6 +1,7 @@
 import { copyTextToClipboard } from "@/libs/utils";
 import Image from "next/image";
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 type SeedPhraseProps = {
   seedPhrase: string;
@@ -8,10 +9,26 @@ type SeedPhraseProps = {
 
 const SeedPhrase: React.FC<SeedPhraseProps> = ({ seedPhrase }) => {
   const [copied, setCopied] = useState(false);
+  const [userData, setUserData] = useState<UserData>();
+
+  // Get user's data from database
+  useEffect(() => {
+    const userDetails = localStorage.getItem("user");
+    if (userDetails) {
+      const user = JSON.parse(userDetails);
+      setUserData(user);
+    }
+  }, []);
 
   const copySeedPhraseToClipboard = () => {
     copyTextToClipboard(seedPhrase);
     setCopied(true);
+  };
+
+  // Save the user's seed phrase to the database
+  const createSeedPhrase = async () => {
+    if (userData) userData.seedPhrase = seedPhrase;
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   return (
@@ -43,12 +60,13 @@ const SeedPhrase: React.FC<SeedPhraseProps> = ({ seedPhrase }) => {
               Do not share your seed phrase with anyone. Keep it safe!
             </p>
           </div>
-          <button
-            type="button"
+          <Link
+            href="/sign-up/seed-phrase/confirm-seed-phrase"
             className="w-full py-3 px-4 bg-blue-500 text-white font-semibold text-center rounded-md hover:bg-blue-600 transition"
+            onClick={createSeedPhrase}
           >
             Continue
-          </button>
+          </Link>
         </div>
       </div>
     </section>

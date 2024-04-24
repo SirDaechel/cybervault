@@ -23,6 +23,12 @@ const Signup = () => {
     if (passcode1Value !== passcodeValue) {
       setError(true);
     } else {
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          passcode: passcodeValue,
+        })
+      );
       router.push("/sign-up/seed-phrase");
     }
   };

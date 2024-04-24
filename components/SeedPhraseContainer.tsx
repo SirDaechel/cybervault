@@ -7,6 +7,7 @@ import { useState } from "react";
 const SeedPhraseContainer = () => {
   const [showSeedPhrase, setShowSeedPhrase] = useState<boolean>(false);
   const [seedPhrase, setSeedPhrase] = useState<string>("");
+
   return (
     <section>
       {showSeedPhrase ? (

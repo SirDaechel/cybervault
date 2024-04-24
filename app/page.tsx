@@ -9,7 +9,7 @@ export default function Home() {
   useEffect(() => {
     // Check if we're on the client
     if (typeof window !== "undefined") {
-      const userData = localStorage.getItem("userData");
+      const userData = localStorage.getItem("user");
 
       // If no user data, redirect to sign-in page
       if (!userData) {
