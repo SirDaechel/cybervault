@@ -3,9 +3,22 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import PasscodeInput from "./PasscodeInput";
+import {
+  createDummyAddress,
+  deriveDummyPublicKey,
+  generateDummyPrivateKey,
+} from "@/libs/utils";
+import { cryptocurrencies } from "@/constants";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/libs/redux-state/features/user/userSlice";
+
+type Address = {
+  [key: string]: string;
+};
 
 const Signup = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [passcode1, setPasscode1] = useState<string[]>(new Array(6).fill(""));
   const [passcode2, setPasscode2] = useState<string[]>(new Array(6).fill(""));
@@ -20,15 +33,41 @@ const Signup = () => {
   };
 
   const handleConfirmComplete = (passcodeValue: any) => {
+    // Prepare user's data
+    const privateKey = generateDummyPrivateKey();
+    const publicKey = deriveDummyPublicKey(privateKey);
+    const addresses: Address = {};
+    let balances: Balance[] = [];
+
+    // Iterate through Cybervault's available crypto currencies, generate user's crypto addresses based on available crypto currencies and set user's balance
+    cryptocurrencies.forEach((crypto) => {
+      addresses[crypto.name] = createDummyAddress(
+        publicKey,
+        crypto.name.substring(0, 3)
+      );
+
+      const balance: Balance = {
+        crypto: crypto.name,
+        value: crypto.value,
+        investment: 0,
+      };
+
+      balances = [...balances, balance];
+    });
+
     if (passcode1Value !== passcodeValue) {
       setError(true);
     } else {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
+      dispatch(
+        setUser({
+          privateKey: privateKey,
+          publicKey: publicKey,
           passcode: passcodeValue,
+          addresses: addresses,
+          balances: balances,
         })
       );
+
       router.push("/sign-up/seed-phrase");
     }
   };

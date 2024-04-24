@@ -1,34 +1,27 @@
 import { copyTextToClipboard } from "@/libs/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setSeedPhrase } from "@/libs/redux-state/features/user/userSlice";
 
 type SeedPhraseProps = {
   seedPhrase: string;
 };
 
 const SeedPhrase: React.FC<SeedPhraseProps> = ({ seedPhrase }) => {
-  const [copied, setCopied] = useState(false);
-  const [userData, setUserData] = useState<UserData>();
+  const dispatch = useDispatch();
 
-  // Get user's data from database
-  useEffect(() => {
-    const userDetails = localStorage.getItem("user");
-    if (userDetails) {
-      const user = JSON.parse(userDetails);
-      setUserData(user);
-    }
-  }, []);
+  const [copied, setCopied] = useState(false);
 
   const copySeedPhraseToClipboard = () => {
     copyTextToClipboard(seedPhrase);
     setCopied(true);
   };
 
-  // Save the user's seed phrase to the database
-  const createSeedPhrase = async () => {
-    if (userData) userData.seedPhrase = seedPhrase;
-    localStorage.setItem("user", JSON.stringify(userData));
+  // Save the user's seed phrase
+  const createSeedPhrase = () => {
+    dispatch(setSeedPhrase(seedPhrase));
   };
 
   return (

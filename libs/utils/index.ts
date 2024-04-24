@@ -1,26 +1,31 @@
-function generateRandomHexString(length: number) {
+const generateRandomHexString = (length: number) => {
   const hexChars = "0123456789abcdef";
   let hexString = "";
   for (let i = 0; i < length; i++) {
     hexString += hexChars.charAt(Math.floor(Math.random() * hexChars.length));
   }
   return hexString;
-}
+};
 
-function generateDummyPrivateKey() {
-  // Generate a 64-character hex string to simulate a 256-bit private key
+export const generateDummyPrivateKey = () => {
+  // Generate a 64-character hex string
   return generateRandomHexString(64);
-}
+};
 
-function deriveDummyPublicKey(privateKey: string) {
+export const deriveDummyPublicKey = (privateKey: string) => {
   // Generate a public key by reversing the private key and taking the first 64 characters
   return privateKey.split("").reverse().join("").substring(0, 64);
-}
+};
 
-function createDummyAddress(publicKey: string) {
+export const createDummyAddress = (publicKey: string, crypto: string) => {
   // Generate address by taking the first 40 characters of the reversed public key
-  return "0x" + publicKey.split("").reverse().join("").substring(0, 40);
-}
+  return (
+    "cb0" +
+    "-" +
+    crypto +
+    publicKey.split("").reverse().join("").substring(0, 40)
+  );
+};
 
 export const generateSeedPhrase = (wordCount = 12) => {
   const wordlist = [
@@ -79,4 +84,13 @@ export const copyTextToClipboard = async (text: string) => {
   } catch (err) {
     console.error("Failed to copy: ", err);
   }
+};
+
+export const sumInvestments = (array: Balance[]) => {
+  return array.reduce((total, item) => {
+    // Ensure that the investment property is a number before adding it to the total
+    return typeof item.investment === "number"
+      ? total + item.investment
+      : total;
+  }, 0);
 };

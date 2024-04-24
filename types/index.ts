@@ -6,3 +6,5 @@ type UserData = {
   addresses: object;
   balances: object;
 };
+
+type Balance = { crypto: string; value: number; investment: number };

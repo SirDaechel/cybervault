@@ -1,28 +1,22 @@
 "use client";
 
+import { userState } from "@/libs/redux-state/features/user/userSlice";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const ConfirmSeed = () => {
   const router = useRouter();
+  const getUser = useSelector(userState);
+  const { user } = getUser;
 
-  const [userData, setUserData] = useState<UserData>();
   const [inputValue, setInputValue] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
-
-  // Get user's data from database
-  useEffect(() => {
-    const userDetails = localStorage.getItem("user");
-    if (userDetails) {
-      const user = JSON.parse(userDetails);
-      setUserData(user);
-    }
-  }, []);
 
   // Confirm user's seed phrase
   const confirmSeedPhrase = () => {
     // Check if user's input is the same as user's seed phrase
-    if (userData && inputValue === userData.seedPhrase) {
+    if (user && inputValue === user.seedPhrase) {
       router.push("/");
     } else {
       setError(true);
