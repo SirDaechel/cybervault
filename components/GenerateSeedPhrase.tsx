@@ -1,8 +1,24 @@
+import { generateSeedPhrase } from "@/libs/utils";
 import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+import { Dispatch, SetStateAction } from "react";
 
-const SecretPhrase = () => {
+type GenerateSeedPhraseProps = {
+  setShowSeedPhrase: Dispatch<SetStateAction<boolean>>;
+  setSeedPhrase: Dispatch<SetStateAction<string>>;
+};
+
+const GenerateSeedPhrase: React.FC<GenerateSeedPhraseProps> = ({
+  setShowSeedPhrase,
+  setSeedPhrase,
+}) => {
+  // Generate user's seed phrase
+  const generateUserSeedPhrase = () => {
+    // Call "generateSeedPhrase" function to get seed phrase
+    const seedPhrase = generateSeedPhrase();
+    setSeedPhrase(seedPhrase);
+    setShowSeedPhrase(true);
+  };
+
   return (
     <section>
       <div className="flex flex-col items-center gap-8 justify-between">
@@ -20,15 +36,16 @@ const SecretPhrase = () => {
             Protect your assets by backing up your secret/seed phrase now
           </p>
         </span>
-        <Link
-          href="/sign-up"
+        <button
+          type="button"
           className="w-full py-3 px-4 bg-blue-500 text-white font-semibold text-center rounded-md hover:bg-blue-600 transition"
+          onClick={generateUserSeedPhrase}
         >
           Backup seed phrase
-        </Link>
+        </button>
       </div>
     </section>
   );
 };
 
-export default SecretPhrase;
+export default GenerateSeedPhrase;
