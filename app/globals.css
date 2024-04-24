@@ -5,3 +5,8 @@
 html {
   scroll-behavior: smooth;
 }
+
+.otp-input::-webkit-outer-spin-button,
+.otp-input::-webkit-inner-spin-button {
+  appearance: none;
+}

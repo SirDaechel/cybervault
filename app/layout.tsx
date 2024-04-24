@@ -20,7 +20,7 @@ export default function RootLayout({
       <body
         className={`${josefin_sans.className} flex items-center justify-center h-screen`}
       >
-        <main className="w-[412px]">
+        <main className="w-[412px] p-4">
           <ReduxProvider>{children}</ReduxProvider>
         </main>
       </body>

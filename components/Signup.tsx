@@ -1,26 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import OtpInput from "./ui/OtpInput";
 import { useRouter } from "next/navigation";
+import PasscodeInput from "./PasscodeInput";
 
 const Signup = () => {
   const router = useRouter();
 
-  const [otp1, setOtp] = useState<string[]>(new Array(6).fill(""));
-  const [otp2, setOtp2] = useState<string[]>(new Array(6).fill(""));
-  const [otp1Value, setOtp1Value] = useState<string>("");
+  const [passcode1, setPasscode1] = useState<string[]>(new Array(6).fill(""));
+  const [passcode2, setPasscode2] = useState<string[]>(new Array(6).fill(""));
+  const [passcode1Value, setPasscode1Value] = useState<string>("");
 
   const [confirmCode, setConfirmCode] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
 
-  const handleComplete = (otpValue: any) => {
-    setOtp1Value(otpValue);
+  const handleComplete = (passcodeValue: any) => {
+    setPasscode1Value(passcodeValue);
     setConfirmCode(true);
   };
 
-  const handleConfirmComplete = (otpValue: any) => {
-    if (otp1Value !== otpValue) {
+  const handleConfirmComplete = (passcodeValue: any) => {
+    if (passcode1Value !== passcodeValue) {
       setError(true);
     } else {
       router.push("/sign-up/seed-phrase");
@@ -37,11 +37,11 @@ const Signup = () => {
           onSubmit={(e) => e.preventDefault()}
           className="flex flex-col gap-8"
         >
-          <OtpInput
-            otp1={otp1}
-            setOtp={setOtp}
-            otp2={otp2}
-            setOtp2={setOtp2}
+          <PasscodeInput
+            passcode1={passcode1}
+            setPasscode1={setPasscode1}
+            passcode2={passcode2}
+            setPasscode2={setPasscode2}
             onComplete={handleComplete}
             confirmCode={confirmCode}
             onConfirmComplete={handleConfirmComplete}
