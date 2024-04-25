@@ -8,3 +8,9 @@ type UserData = {
 };
 
 type Balance = { crypto: string; value: number; investment: number };
+
+type ExchangeRates = {
+  [key: string]: {
+    [key: string]: number;
+  };
+};

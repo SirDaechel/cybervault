@@ -94,3 +94,24 @@ export const sumInvestments = (array: Balance[]) => {
       : total;
   }, 0);
 };
+
+// // Function to get the exchange rate
+// const getExchangeRate = (fromCurrency: string, toCurrency: string) => {
+//   return exchangeRates[fromCurrency][toCurrency] || null;
+// };
+
+// // Function to swap currencies
+// const swapCurrencies = (
+//   fromCurrency: string,
+//   toCurrency: string,
+//   amount: number
+// ) => {
+//   const rate = getExchangeRate(fromCurrency, toCurrency);
+//   if (rate === null) {
+//     throw new Error(
+//       `Exchange rate not found for ${fromCurrency} to ${toCurrency}`
+//     );
+//   }
+//   const exchangedAmount = amount * rate;
+//   return exchangedAmount;
+// };
