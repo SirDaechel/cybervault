@@ -20,8 +20,9 @@ const CurrencyListDropdown: React.FC<CurrencyListDropdownProps> = ({
 
   return (
     <ul className="w-16 mt-1 rounded-md absolute items-center justify-center border border-zinc-700 bg-white drop-shadow-md">
-      {cryptocurrencies.map((crypto) => (
+      {cryptocurrencies.map((crypto, index) => (
         <li
+          key={index}
           className="capitalize w-full text-sm cursor-pointer p-1 text-center hover:bg-gray-200 hover:transition"
           onClick={(e) => handleCryptoChange(e)}
         >
