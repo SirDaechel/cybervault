@@ -7,11 +7,13 @@ import CryptoToSwap from "./CryptoToSwap";
 type SwapCryptoInput = {
   selectedCrypto: string | null;
   setSelectedCrypto: Dispatch<SetStateAction<string | null>>;
+  placeholder: string;
 };
 
 const SwapCryptoInput: React.FC<SwapCryptoInput> = ({
   selectedCrypto,
   setSelectedCrypto,
+  placeholder,
 }) => {
   const [showCryproList, setShowCryptoList] = useState(false);
 
@@ -33,7 +35,7 @@ const SwapCryptoInput: React.FC<SwapCryptoInput> = ({
         <input
           type="text"
           className="p-2 border border-zinc-700 rounded-md"
-          placeholder="from"
+          placeholder={placeholder}
         />
       </span>
     </section>

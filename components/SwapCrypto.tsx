@@ -18,6 +18,7 @@ const SwapCrypto = () => {
           <SwapCryptoInput
             selectedCrypto={isChangePosition ? toCrypto : fromCrypto}
             setSelectedCrypto={isChangePosition ? setToCrypto : setFromCrypto}
+            placeholder="from"
           />
           <button
             type="button"
@@ -29,6 +30,7 @@ const SwapCrypto = () => {
           <SwapCryptoInput
             selectedCrypto={isChangePosition ? fromCrypto : toCrypto}
             setSelectedCrypto={isChangePosition ? setFromCrypto : setToCrypto}
+            placeholder="to"
           />
         </div>
       </div>
