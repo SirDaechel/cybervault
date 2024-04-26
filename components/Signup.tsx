@@ -49,6 +49,7 @@ const Signup = () => {
       const balance: Balance = {
         crypto: crypto.name,
         value: crypto.value,
+        symbol: crypto.symbol,
         investment: 5,
       };
 

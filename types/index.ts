@@ -7,7 +7,12 @@ type UserData = {
   balances: object;
 };
 
-type Balance = { crypto: string; value: number; investment: number };
+type Balance = {
+  crypto: string;
+  value: number;
+  symbol: string;
+  investment: number;
+};
 
 type ExchangeRates = {
   [key: string]: {

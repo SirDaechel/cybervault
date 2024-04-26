@@ -1,5 +1,7 @@
+import { userState } from "@/libs/redux-state/features/user/userSlice";
 import Image from "next/image";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 type CryptoToSwapProps = {
   selectedCrypto: string | null;
@@ -10,6 +12,57 @@ const CryptoToSwap: React.FC<CryptoToSwapProps> = ({
   selectedCrypto,
   setShowCryproList,
 }) => {
+  const getUser = useSelector(userState);
+  const { user } = getUser;
+
+  const [amountOfCrypto, setAmountOfCrypto] = useState<number>(0);
+
+  // Get amount of crypto
+  const getAmountofCrypto = () => {
+    if (user.balances) {
+      // Get user balances
+      const userBalance = user.balances;
+
+      // Find crypto that has its symbol the same as the selectedCrypto and return it
+      const crypto = userBalance.find((crypto) => {
+        return crypto.symbol === selectedCrypto;
+      });
+
+      // If crypto exists, calculate the amount of crypto the user has
+      if (crypto) {
+        const amountOfCrypto = crypto.investment / crypto.value;
+        setAmountOfCrypto(amountOfCrypto);
+      } else {
+        console.log("User does not have selected crypto");
+      }
+    } else {
+      console.log("User has no balances");
+    }
+  };
+
+  // Run the getAmountofCrypto on initial render
+  useEffect(() => {
+    getAmountofCrypto();
+  }, [selectedCrypto]);
+
+  // Format amount of crypto
+  const formatNumber = (num: number) => {
+    // Convert number to string
+    let numStr = num.toString();
+
+    // Find the position of the first digit that is not 0 after the decimal point
+    let index = numStr.indexOf(".") + 1;
+    while (numStr[index] === "0") {
+      index++;
+    }
+
+    // Number of digits to display after the decimal point
+    let digits = index - numStr.indexOf(".") + 3;
+
+    // Use toFixed to round the number
+    return Number(num).toFixed(digits);
+  };
+
   return (
     <div className="w-full flex items-center justify-between gap-2">
       <button
@@ -24,7 +77,7 @@ const CryptoToSwap: React.FC<CryptoToSwapProps> = ({
           <Image src="/arrow-down.svg" width={17} height={17} alt="arrow" />
         </span>
       </button>
-      <p>Balance: 0</p>
+      <p>Balance: {formatNumber(amountOfCrypto)}</p>
     </div>
   );
 };

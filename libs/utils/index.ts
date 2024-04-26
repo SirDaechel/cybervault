@@ -1,3 +1,5 @@
+import { exchangeRates } from "@/constants";
+
 const generateRandomHexString = (length: number) => {
   const hexChars = "0123456789abcdef";
   let hexString = "";
@@ -95,23 +97,23 @@ export const sumInvestments = (array: Balance[]) => {
   }, 0);
 };
 
-// // Function to get the exchange rate
-// const getExchangeRate = (fromCurrency: string, toCurrency: string) => {
-//   return exchangeRates[fromCurrency][toCurrency] || null;
-// };
+// Function to get the exchange rate
+export const getExchangeRate = (fromCurrency: string, toCurrency: string) => {
+  return exchangeRates[fromCurrency][toCurrency] || null;
+};
 
-// // Function to swap currencies
-// const swapCurrencies = (
-//   fromCurrency: string,
-//   toCurrency: string,
-//   amount: number
-// ) => {
-//   const rate = getExchangeRate(fromCurrency, toCurrency);
-//   if (rate === null) {
-//     throw new Error(
-//       `Exchange rate not found for ${fromCurrency} to ${toCurrency}`
-//     );
-//   }
-//   const exchangedAmount = amount * rate;
-//   return exchangedAmount;
-// };
+// Function to swap currencies
+export const swapCurrencies = (
+  fromCurrency: string,
+  toCurrency: string,
+  amount: number
+) => {
+  const rate = getExchangeRate(fromCurrency, toCurrency);
+  if (rate === null) {
+    throw new Error(
+      `Exchange rate not found for ${fromCurrency} to ${toCurrency}`
+    );
+  }
+  const exchangedAmount = amount * rate;
+  return exchangedAmount;
+};

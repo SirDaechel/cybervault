@@ -3,7 +3,7 @@ import { Dispatch, MouseEvent, SetStateAction } from "react";
 
 type CurrencyListDropdownProps = {
   setShowCryptoList: Dispatch<SetStateAction<boolean>>;
-  setSelectedCrypto: Dispatch<SetStateAction<string | null>>;
+  setSelectedCrypto: Dispatch<SetStateAction<string>>;
 };
 
 const CurrencyListDropdown: React.FC<CurrencyListDropdownProps> = ({
@@ -14,7 +14,9 @@ const CurrencyListDropdown: React.FC<CurrencyListDropdownProps> = ({
   const handleCryptoChange = (
     e: MouseEvent<HTMLLIElement, globalThis.MouseEvent>
   ) => {
-    setSelectedCrypto(e.currentTarget.textContent);
+    if (e.currentTarget.textContent) {
+      setSelectedCrypto(e.currentTarget.textContent);
+    }
     setShowCryptoList(false);
   };
 

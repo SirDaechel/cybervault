@@ -1,19 +1,25 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import CurrencyListDropdown from "./CurrencyListDropdown";
 import CryptoToSwap from "./CryptoToSwap";
 
 type SwapCryptoInput = {
-  selectedCrypto: string | null;
-  setSelectedCrypto: Dispatch<SetStateAction<string | null>>;
+  type: string;
+  selectedCrypto: string;
+  setSelectedCrypto: Dispatch<SetStateAction<string>>;
   placeholder: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  amountTo?: number;
 };
 
 const SwapCryptoInput: React.FC<SwapCryptoInput> = ({
+  type,
   selectedCrypto,
   setSelectedCrypto,
   placeholder,
+  onChange,
+  amountTo,
 }) => {
   const [showCryproList, setShowCryptoList] = useState(false);
 
@@ -33,9 +39,13 @@ const SwapCryptoInput: React.FC<SwapCryptoInput> = ({
           )}
         </div>
         <input
-          type="text"
-          className="p-2 border border-zinc-700 rounded-md"
+          type="number"
+          className="p-2 border border-zinc-700 rounded-md otp-input disabled:bg-gray-200"
           placeholder={placeholder}
+          step={0.00000000001}
+          onChange={onChange}
+          value={amountTo}
+          disabled={type === "to"}
         />
       </span>
     </section>
