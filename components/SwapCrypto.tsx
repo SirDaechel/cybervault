@@ -4,10 +4,14 @@ import { ChangeEvent, useEffect, useState } from "react";
 import SwapCryptoInput from "./SwapCryptoInput";
 import Image from "next/image";
 import { swapCurrencies } from "@/libs/utils";
-import { useSelector } from "react-redux";
-import { userState } from "@/libs/redux-state/features/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setBalance,
+  userState,
+} from "@/libs/redux-state/features/user/userSlice";
 
 const SwapCrypto = () => {
+  const dispatch = useDispatch();
   const getUser = useSelector(userState);
   const { user } = getUser;
 
@@ -17,6 +21,7 @@ const SwapCrypto = () => {
   const [amountTo, setAmountTo] = useState<number>();
   const [error, setError] = useState<boolean>(false);
   const [exchangeError, setExchangeError] = useState<boolean>(false);
+  const [refetchUserData, setRefetchUserData] = useState<number>(0);
 
   // Set user input amount
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -71,10 +76,62 @@ const SwapCrypto = () => {
     setToCrypto(fromCrypto);
   };
 
+  const convertCurrency = () => {
+    if (user.balances) {
+      // Get user balances
+      const userBalance = user.balances;
+
+      // Find crypto that has its symbol the same as the fromCrypto and return it
+      const cryptoFrom = userBalance.find((crypto) => {
+        return crypto.symbol === fromCrypto;
+      });
+
+      // Find crypto that has its symbol the same as the toCrypto and return it
+      const cryptoTo = userBalance.find((crypto) => {
+        return crypto.symbol === toCrypto;
+      });
+
+      if (cryptoFrom && cryptoTo && amountTo) {
+        // Convert crypto balance of the amountFrom and amountTo fields to fiat balance
+        const fromFiat = Number(amountFrom) * cryptoFrom.value;
+        const toFiat = amountTo * cryptoTo.value;
+
+        const updatedFromInvestment = cryptoFrom.investment - fromFiat;
+        const updatedToInvestment = cryptoTo.investment + toFiat;
+
+        // Calculate the amount of crypto the user has and check if the user input (amountFrom) is less than user's amount of crypto
+        const amountOfCrypto = cryptoFrom.investment / cryptoFrom.value;
+        const roundedAmountOfCrypto = Number(amountOfCrypto.toFixed(8));
+        const roundedAmountFrom = Number(Number(amountFrom).toFixed(8));
+
+        if (roundedAmountOfCrypto < roundedAmountFrom) {
+          setError(true);
+        } else {
+          setError(false);
+
+          dispatch(
+            setBalance({
+              fromCrypto,
+              toCrypto,
+              updatedFromInvestment,
+              updatedToInvestment,
+            })
+          );
+
+          setRefetchUserData((prev) => prev + 1);
+        }
+      } else {
+        console.log("You do not have selected currencies");
+      }
+    } else {
+      console.log("Your balances are empty");
+    }
+  };
+
   return (
     <section>
       <div className="flex flex-col items-center gap-8">
-        <h1 className="font-semibold text-xl text-center">Swap crypto</h1>
+        <h1 className="font-semibold text-xl text-center mb-6">Swap crypto</h1>
         <div className="w-full flex flex-col items-center gap-8">
           <span className="w-full">
             <SwapCryptoInput
@@ -84,6 +141,7 @@ const SwapCrypto = () => {
               placeholder="from"
               onChange={onChange}
               exchangeError={exchangeError}
+              refetchUserData={refetchUserData}
             />
             {error && (
               <p className="text-red-500 text-sm">
@@ -104,12 +162,14 @@ const SwapCrypto = () => {
             setSelectedCrypto={setToCrypto}
             placeholder="to"
             amountTo={amountTo}
+            refetchUserData={refetchUserData}
           />
         </div>
         <button
           type="button"
           disabled={error || exchangeError}
           className="w-full p-2 rounded-md text-white bg-blue-500 hover:bg-blue-600 transition disabled:cursor-not-allowed disabled:bg-gray-400"
+          onClick={convertCurrency}
         >
           {exchangeError
             ? `Exchange rate not found for ${fromCrypto} to ${toCrypto}`

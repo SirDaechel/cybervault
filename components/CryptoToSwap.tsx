@@ -6,11 +6,13 @@ import { useSelector } from "react-redux";
 type CryptoToSwapProps = {
   selectedCrypto: string | null;
   setShowCryproList: Dispatch<SetStateAction<boolean>>;
+  refetchUserData: number;
 };
 
 const CryptoToSwap: React.FC<CryptoToSwapProps> = ({
   selectedCrypto,
   setShowCryproList,
+  refetchUserData,
 }) => {
   const getUser = useSelector(userState);
   const { user } = getUser;
@@ -43,7 +45,7 @@ const CryptoToSwap: React.FC<CryptoToSwapProps> = ({
   // Run the getAmountofCrypto on initial render
   useEffect(() => {
     getAmountofCrypto();
-  }, [selectedCrypto]);
+  }, [selectedCrypto, refetchUserData]);
 
   return (
     <div className="w-full flex items-center justify-between gap-2">

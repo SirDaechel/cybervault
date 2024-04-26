@@ -12,6 +12,7 @@ type SwapCryptoInput = {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   amountTo?: number;
   exchangeError?: boolean;
+  refetchUserData: number;
 };
 
 const SwapCryptoInput: React.FC<SwapCryptoInput> = ({
@@ -22,6 +23,7 @@ const SwapCryptoInput: React.FC<SwapCryptoInput> = ({
   onChange,
   amountTo,
   exchangeError,
+  refetchUserData,
 }) => {
   const [showCryproList, setShowCryptoList] = useState(false);
 
@@ -32,6 +34,7 @@ const SwapCryptoInput: React.FC<SwapCryptoInput> = ({
           <CryptoToSwap
             selectedCrypto={selectedCrypto}
             setShowCryproList={setShowCryptoList}
+            refetchUserData={refetchUserData}
           />
           {showCryproList && (
             <CurrencyListDropdown
