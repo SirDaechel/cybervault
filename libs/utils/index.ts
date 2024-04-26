@@ -110,9 +110,7 @@ export const swapCurrencies = (
 ) => {
   const rate = getExchangeRate(fromCurrency, toCurrency);
   if (rate === null) {
-    throw new Error(
-      `Exchange rate not found for ${fromCurrency} to ${toCurrency}`
-    );
+    return null;
   }
   const exchangedAmount = amount * rate;
   return exchangedAmount;

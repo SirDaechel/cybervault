@@ -11,6 +11,7 @@ type SwapCryptoInput = {
   placeholder: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   amountTo?: number;
+  exchangeError?: boolean;
 };
 
 const SwapCryptoInput: React.FC<SwapCryptoInput> = ({
@@ -20,6 +21,7 @@ const SwapCryptoInput: React.FC<SwapCryptoInput> = ({
   placeholder,
   onChange,
   amountTo,
+  exchangeError,
 }) => {
   const [showCryproList, setShowCryptoList] = useState(false);
 
@@ -45,7 +47,7 @@ const SwapCryptoInput: React.FC<SwapCryptoInput> = ({
           step={0.00000000001}
           onChange={onChange}
           value={amountTo}
-          disabled={type === "to"}
+          disabled={type === "to" || exchangeError}
         />
       </span>
     </section>

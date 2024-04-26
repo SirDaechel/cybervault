@@ -45,24 +45,6 @@ const CryptoToSwap: React.FC<CryptoToSwapProps> = ({
     getAmountofCrypto();
   }, [selectedCrypto]);
 
-  // Format amount of crypto
-  const formatNumber = (num: number) => {
-    // Convert number to string
-    let numStr = num.toString();
-
-    // Find the position of the first digit that is not 0 after the decimal point
-    let index = numStr.indexOf(".") + 1;
-    while (numStr[index] === "0") {
-      index++;
-    }
-
-    // Number of digits to display after the decimal point
-    let digits = index - numStr.indexOf(".") + 3;
-
-    // Use toFixed to round the number
-    return Number(num).toFixed(digits);
-  };
-
   return (
     <div className="w-full flex items-center justify-between gap-2">
       <button
@@ -77,7 +59,7 @@ const CryptoToSwap: React.FC<CryptoToSwapProps> = ({
           <Image src="/arrow-down.svg" width={17} height={17} alt="arrow" />
         </span>
       </button>
-      <p>Balance: {formatNumber(amountOfCrypto)}</p>
+      <p>Balance: {amountOfCrypto.toFixed(8)}</p>
     </div>
   );
 };
