@@ -89,7 +89,7 @@ const PasscodeInput: React.FC<PasscodeInputProps> = ({
               ? passcode2Refs.current[index]
               : passcode1Refs.current[index]
           }
-          className="otp-input w-12 h-12 mr-2 text-center border border-zinc-700"
+          className="w-12 h-12 mr-2 text-center border border-zinc-700"
           type="number"
           maxLength={1}
           value={data}
