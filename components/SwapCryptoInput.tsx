@@ -45,7 +45,7 @@ const SwapCryptoInput: React.FC<SwapCryptoInput> = ({
         </div>
         <input
           type="number"
-          className="p-2 border border-zinc-700 rounded-md otp-input disabled:bg-gray-200"
+          className="p-2 border border-zinc-700 rounded-md disabled:bg-gray-200"
           placeholder={placeholder}
           step={0.00000000001}
           onChange={onChange}
