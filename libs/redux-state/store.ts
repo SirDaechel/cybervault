@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import UserReducer from "./features/user/userSlice";
+import TransactionReducer from "./features/transactions/transactionSlice";
 
 export const store = configureStore({
   reducer: {
     user: UserReducer,
+    transactions: TransactionReducer,
   },
 });
 

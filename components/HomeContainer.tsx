@@ -7,12 +7,17 @@ import { userState } from "@/libs/redux-state/features/user/userSlice";
 import { sumInvestments } from "@/libs/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { transactionState } from "@/libs/redux-state/features/transactions/transactionSlice";
+import Transactions from "./Transactions";
 
 export const HomeContainer = () => {
   const router = useRouter();
 
   const getUser = useSelector(userState);
   const { user } = getUser;
+
+  const getTransactions = useSelector(transactionState);
+  const { transactions } = getTransactions;
 
   useEffect(() => {
     // Check if we're on the client
@@ -35,7 +40,7 @@ export const HomeContainer = () => {
         <span className="w-full flex flex-col gap-2 bg-zinc-100 rounded-md p-6">
           <p className="text-zinc-800 text-center text-sm">Available balance</p>
           <h1 className="text-center text-2xl font-bold text-zinc-700">
-            ${userInvestment}
+            ${userInvestment.toFixed(2)}
           </h1>
         </span>
         <span className="w-full flex items-center gap-4 justify-between">
@@ -61,8 +66,9 @@ export const HomeContainer = () => {
             <p>Swap</p>
           </Link>
         </span>
-        <span className="w-full bg-zinc-100 rounded-md p-6">
-          <p className="text-zinc-800 text-center text">Transactions</p>
+        <span className="w-full max-h-64 bg-zinc-100 rounded-md p-6 overflow-y-auto">
+          <p className="text-zinc-800 text-center text mb-4">Transactions</p>
+          <Transactions transactions={transactions} />
         </span>
       </div>
     </section>

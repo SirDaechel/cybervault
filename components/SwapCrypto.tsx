@@ -3,15 +3,19 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import SwapCryptoInput from "./SwapCryptoInput";
 import Image from "next/image";
-import { swapCurrencies } from "@/libs/utils";
+import { getCurrentDateAndTimeFormatted, swapCurrencies } from "@/libs/utils";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setBalance,
   userState,
 } from "@/libs/redux-state/features/user/userSlice";
+import { setTransaction } from "@/libs/redux-state/features/transactions/transactionSlice";
+import { useRouter } from "next/navigation";
 
 const SwapCrypto = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const getUser = useSelector(userState);
   const { user } = getUser;
 
@@ -118,7 +122,17 @@ const SwapCrypto = () => {
             })
           );
 
+          const dateTime = getCurrentDateAndTimeFormatted();
+
+          dispatch(
+            setTransaction(
+              `You swapped ${amountFrom} ${fromCrypto} to ${amountTo} ${toCrypto} on ${dateTime}`
+            )
+          );
+
           setRefetchUserData((prev) => prev + 1);
+
+          router.push("/");
         }
       } else {
         console.log("You do not have selected currencies");

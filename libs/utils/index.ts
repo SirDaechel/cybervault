@@ -115,3 +115,47 @@ export const swapCurrencies = (
   const exchangedAmount = amount * rate;
   return exchangedAmount;
 };
+
+export const getCurrentDateAndTimeFormatted = () => {
+  let today = new Date();
+  let dd = today.getDate();
+  let mm = today.toLocaleString("default", { month: "long" });
+  let yyyy = today.getFullYear();
+  let hours = today.getHours();
+  let minutes = today.getMinutes();
+  let ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+
+  // Function to add the ordinal suffix to the day
+  function getOrdinalSuffix(day: number) {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
+    }
+  }
+
+  // Function to format the time as "hh:mm AM/PM"
+  function formatTime(h: number, m: number, ampm: string) {
+    return (
+      h.toString().padStart(2, "0") +
+      ":" +
+      m.toString().padStart(2, "0") +
+      " " +
+      ampm
+    );
+  }
+
+  return `${dd}${getOrdinalSuffix(dd)} ${mm} ${yyyy}, ${formatTime(
+    hours,
+    minutes,
+    ampm
+  )}`;
+};
