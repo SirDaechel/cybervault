@@ -44,7 +44,7 @@ const SwapCryptoInput: React.FC<SwapCryptoInput> = ({
           )}
         </div>
         <input
-          type="text"
+          type="number"
           inputMode="decimal"
           pattern="[0-9]*"
           className="p-2 border border-zinc-700 rounded-md otp-input disabled:bg-gray-200"
