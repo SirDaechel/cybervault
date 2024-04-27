@@ -39,7 +39,7 @@ const PasscodeInput: React.FC<PasscodeInputProps> = ({
     const newOtp = confirmCode ? [...passcode2] : [...passcode1];
     const setNewOtp = confirmCode ? setPasscode2 : setPasscode1;
 
-    if (isNaN(Number(value))) return; // Ensure that it is a number
+    if (isNaN(Number(value))) return; // Ensure input is a number
 
     newOtp[index] = value;
     setNewOtp(newOtp);
@@ -90,7 +90,7 @@ const PasscodeInput: React.FC<PasscodeInputProps> = ({
               : passcode1Refs.current[index]
           }
           className="otp-input w-12 h-12 mr-2 text-center border border-zinc-700"
-          type="number"
+          type="text"
           maxLength={1}
           value={data}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
