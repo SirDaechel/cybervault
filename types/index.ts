@@ -14,6 +14,10 @@ type Balance = {
   investment: number;
 };
 
+type Address = {
+  [key: string]: string;
+};
+
 type ExchangeRates = {
   [key: string]: {
     [key: string]: number;

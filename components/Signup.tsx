@@ -12,10 +12,6 @@ import { cryptocurrencies } from "@/constants";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/libs/redux-state/features/user/userSlice";
 
-type Address = {
-  [key: string]: string;
-};
-
 const Signup = () => {
   const router = useRouter();
   const dispatch = useDispatch();

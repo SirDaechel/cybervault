@@ -90,7 +90,7 @@ const PasscodeInput: React.FC<PasscodeInputProps> = ({
               : passcode1Refs.current[index]
           }
           className="w-12 h-12 mr-2 otp-input text-center border border-zinc-700"
-          type="number"
+          type="text"
           inputMode="numeric"
           pattern="[0-9]*"
           maxLength={1}

@@ -7,7 +7,7 @@ const initialState = {
     publicKey: "",
     passcode: "",
     seedPhrase: "",
-    addresses: {},
+    addresses: {} as Address,
     balances: [] as Balance[],
   },
 };
