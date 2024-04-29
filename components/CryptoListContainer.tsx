@@ -6,7 +6,6 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useSelector } from "react-redux";
 import SendCrypto from "./SendCrypto";
 import ReceiveCrypto from "./ReceiveCrypto";
-import { Suspense } from "react";
 
 type CryptoListContainerProps = {
   type: string;
@@ -36,13 +35,9 @@ const CryptoListContainer: React.FC<CryptoListContainerProps> = ({ type }) => {
     <section className="w-full">
       {currentCrypto ? (
         type === "send" ? (
-          <Suspense fallback={<div>Loading...</div>}>
-            <SendCrypto currentCrypto={currentCrypto} />
-          </Suspense>
+          <SendCrypto currentCrypto={currentCrypto} />
         ) : (
-          <Suspense fallback={<div>Loading...</div>}>
-            <ReceiveCrypto currentCrypto={currentCrypto} />
-          </Suspense>
+          <ReceiveCrypto currentCrypto={currentCrypto} />
         )
       ) : (
         <>
