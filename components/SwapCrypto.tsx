@@ -6,7 +6,7 @@ import Image from "next/image";
 import { getCurrentDateAndTimeFormatted, swapCurrencies } from "@/libs/utils";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setBalance,
+  setBalanceSwap,
   userState,
 } from "@/libs/redux-state/features/user/userSlice";
 import { setTransaction } from "@/libs/redux-state/features/transactions/transactionSlice";
@@ -112,18 +112,18 @@ const SwapCrypto = () => {
           setError(true);
         } else {
           setError(false);
-
+          // Set user's balance
           dispatch(
-            setBalance({
+            setBalanceSwap({
               fromCrypto,
               toCrypto,
               updatedFromInvestment,
               updatedToInvestment,
             })
           );
-
+          // Get date of transaction
           const dateTime = getCurrentDateAndTimeFormatted();
-
+          // Set transaction message or notification
           dispatch(
             setTransaction(
               `You swapped ${amountFrom} ${fromCrypto} to ${amountTo} ${toCrypto} on ${dateTime}`
@@ -131,7 +131,7 @@ const SwapCrypto = () => {
           );
 
           setRefetchUserData((prev) => prev + 1);
-
+          // Take user to the home page
           router.push("/");
         }
       } else {

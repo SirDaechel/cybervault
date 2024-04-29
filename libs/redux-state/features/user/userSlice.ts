@@ -22,7 +22,7 @@ export const user = createSlice({
     setSeedPhrase: (state, action) => {
       state.user.seedPhrase = action.payload;
     },
-    setBalance: (state, action) => {
+    setBalanceSwap: (state, action) => {
       const {
         fromCrypto,
         toCrypto,
@@ -43,10 +43,22 @@ export const user = createSlice({
         cryptoBalance2.investment = updatedToInvestment;
       }
     },
+    setBalanceSend: (state, action) => {
+      const { currentCrypto, updatedInvestment } = action.payload;
+
+      const cryptoBalance = state.user.balances.find(
+        (balance) => balance.symbol === currentCrypto
+      );
+
+      if (cryptoBalance) {
+        cryptoBalance.investment = updatedInvestment;
+      }
+    },
   },
 });
 
 export const userState = (state: RootState) => state.user;
-export const { setUser, setSeedPhrase, setBalance } = user.actions;
+export const { setUser, setSeedPhrase, setBalanceSwap, setBalanceSend } =
+  user.actions;
 
 export default user.reducer;
