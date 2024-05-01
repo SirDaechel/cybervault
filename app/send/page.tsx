@@ -4,7 +4,7 @@ import { Suspense } from "react";
 const page = () => {
   return (
     <section className="w-full">
-      <Suspense fallback={<p className="text-center">Loading...</p>}>
+      <Suspense fallback={<p className="text-center"></p>}>
         <CryptoListContainer type="send" />
       </Suspense>
     </section>

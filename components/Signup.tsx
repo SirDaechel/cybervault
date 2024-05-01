@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import PasscodeInput from "./PasscodeInput";
 import {
@@ -11,10 +11,13 @@ import {
 import { cryptocurrencies } from "@/constants";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/libs/redux-state/features/user/userSlice";
+import Loading from "./Loading";
 
 const Signup = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const [isLoader, setIsLoader] = useState<boolean>(true);
 
   const [passcode1, setPasscode1] = useState<string[]>(new Array(6).fill(""));
   const [passcode2, setPasscode2] = useState<string[]>(new Array(6).fill(""));
@@ -69,36 +72,47 @@ const Signup = () => {
     }
   };
 
+  // Set a loader for 1.5 seconds
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoader(false);
+    }, 1500);
+  }, []);
+
   return (
     <section>
-      <div className="flex flex-col items-center gap-8">
-        <p className="text-2xl">
-          {!confirmCode ? "Create passcode" : "Confirm passcode"}
-        </p>
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="flex flex-col gap-8"
-        >
-          <PasscodeInput
-            passcode1={passcode1}
-            setPasscode1={setPasscode1}
-            passcode2={passcode2}
-            setPasscode2={setPasscode2}
-            onComplete={handleComplete}
-            confirmCode={confirmCode}
-            onConfirmComplete={handleConfirmComplete}
-          />
-          <p className="text-sm text-center">
-            {!confirmCode ? "Enter" : "Re-enter"} your passcode. Make sure to
-            remember it so you can unlock your wallet.
+      {isLoader ? (
+        <Loading />
+      ) : (
+        <div className="flex flex-col items-center gap-8">
+          <p className="text-2xl">
+            {!confirmCode ? "Create passcode" : "Confirm passcode"}
           </p>
-          {error && (
-            <p className="text-center text-red-500">
-              Codes do not match. Try again.
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="flex flex-col gap-8"
+          >
+            <PasscodeInput
+              passcode1={passcode1}
+              setPasscode1={setPasscode1}
+              passcode2={passcode2}
+              setPasscode2={setPasscode2}
+              onComplete={handleComplete}
+              confirmCode={confirmCode}
+              onConfirmComplete={handleConfirmComplete}
+            />
+            <p className="text-sm text-center">
+              {!confirmCode ? "Enter" : "Re-enter"} your passcode. Make sure to
+              remember it so you can unlock your wallet.
             </p>
-          )}
-        </form>
-      </div>
+            {error && (
+              <p className="text-center text-red-500">
+                Codes do not match. Try again.
+              </p>
+            )}
+          </form>
+        </div>
+      )}
     </section>
   );
 };

@@ -2,20 +2,32 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
 const initialState = {
-  transactions: [] as string[],
+  receivedTransactions: [] as string[],
+  sentTransactions: [] as string[],
+  swappedTransactions: [] as string[],
 };
 
 export const transactions = createSlice({
   name: "transactions",
   initialState,
   reducers: {
-    setTransaction: (state, action) => {
-      state.transactions.push(action.payload);
+    setReceivedTransaction: (state, action) => {
+      state.receivedTransactions.push(action.payload);
+    },
+    setSentTransaction: (state, action) => {
+      state.receivedTransactions.push(action.payload);
+    },
+    setSwappedTransaction: (state, action) => {
+      state.receivedTransactions.push(action.payload);
     },
   },
 });
 
 export const transactionState = (state: RootState) => state.transactions;
-export const { setTransaction } = transactions.actions;
+export const {
+  setReceivedTransaction,
+  setSentTransaction,
+  setSwappedTransaction,
+} = transactions.actions;
 
 export default transactions.reducer;

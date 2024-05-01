@@ -7,6 +7,8 @@ import { getCurrentDateAndTimeFormatted } from "@/libs/utils";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import SuccessCheckmark from "./SuccessCheckmark";
+import Loading from "./Loading";
 
 type SendCryptoProps = {
   currentCrypto: string;
@@ -19,6 +21,10 @@ const SendCrypto: React.FC<SendCryptoProps> = ({ currentCrypto }) => {
   const getUser = useSelector(userState);
   const { user } = getUser;
   const userBalances = user.balances;
+
+  const [isLoader, setIsLoader] = useState<boolean>(false);
+  const [isTransactionSuccess, setIsTransactionSuccess] =
+    useState<boolean>(false);
 
   const [currentCryptoBalance, setCurrentCryptoBalance] = useState<number>(0);
   const [address, setAddress] = useState<string>("");
@@ -78,8 +84,22 @@ const SendCrypto: React.FC<SendCryptoProps> = ({ currentCrypto }) => {
           )}) to the address ${address} on ${dateTime}`
         )
       );
-      // Take user to the home page
-      router.push("/");
+
+      // Set Loader to true
+      setIsLoader(true);
+
+      // After 1 second, set the loader to false and set transaction success to true
+      setTimeout(() => {
+        // Set Loader to false
+        setIsLoader(false);
+        // Set transaction success to true
+        setIsTransactionSuccess(true);
+      }, 1000);
+
+      // After 1.5secs, take user to the home page
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
     } else {
       console.log("You do not have selected currencies");
     }
@@ -87,48 +107,56 @@ const SendCrypto: React.FC<SendCryptoProps> = ({ currentCrypto }) => {
 
   return (
     <section className="w-full">
-      <div className="flex flex-col gap-2 mb-8">
-        <h1 className="font-semibold text-xl text-center">
-          Send {currentCrypto}
-        </h1>
-        <p className="text-sm text-center">{currentCryptoBalance}</p>
-      </div>
-      <form
-        onSubmit={(e) => e.preventDefault()}
-        className="flex flex-col gap-4"
-      >
-        <span className="flex flex-col">
-          <label htmlFor="address">Recepient address</label>
-          <input
-            id="address"
-            type="text"
-            className="p-2 border border-zinc-700 rounded-md"
-            placeholder="enter recepient address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-        </span>
-        <span className="flex flex-col">
-          <label htmlFor="amount">Amount</label>
-          <input
-            id="amount"
-            type="text"
-            inputMode="decimal"
-            className="p-2 border border-zinc-700 otp-input rounded-md"
-            placeholder={`enter amount of ${currentCrypto}`}
-            value={amount}
-            onChange={handleAmount}
-          />
-        </span>
-        <button
-          type="submit"
-          className="w-full py-3 px-4 bg-blue-500 text-white text-center rounded-md hover:bg-blue-600 transition disabled:cursor-not-allowed disabled:bg-gray-400"
-          disabled={error}
-          onClick={handleSend}
-        >
-          Send {currentCrypto}
-        </button>
-      </form>
+      {isTransactionSuccess ? (
+        <SuccessCheckmark />
+      ) : isLoader ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="flex flex-col gap-2 mb-8">
+            <h1 className="font-semibold text-xl text-center">
+              Send {currentCrypto}
+            </h1>
+            <p className="text-sm text-center">{currentCryptoBalance}</p>
+          </div>
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="flex flex-col gap-4"
+          >
+            <span className="flex flex-col">
+              <label htmlFor="address">Recepient address</label>
+              <input
+                id="address"
+                type="text"
+                className="p-2 border border-zinc-700 rounded-md"
+                placeholder="enter recepient address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </span>
+            <span className="flex flex-col">
+              <label htmlFor="amount">Amount</label>
+              <input
+                id="amount"
+                type="text"
+                inputMode="decimal"
+                className="p-2 border border-zinc-700 otp-input rounded-md"
+                placeholder={`enter amount of ${currentCrypto}`}
+                value={amount}
+                onChange={handleAmount}
+              />
+            </span>
+            <button
+              type="submit"
+              className="w-full py-3 px-4 bg-blue-500 text-white text-center rounded-md hover:bg-blue-600 transition disabled:cursor-not-allowed disabled:bg-gray-400"
+              disabled={error}
+              onClick={handleSend}
+            >
+              Send {currentCrypto}
+            </button>
+          </form>
+        </>
+      )}
     </section>
   );
 };

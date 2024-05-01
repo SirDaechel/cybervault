@@ -11,6 +11,8 @@ import {
 } from "@/libs/redux-state/features/user/userSlice";
 import { setTransaction } from "@/libs/redux-state/features/transactions/transactionSlice";
 import { useRouter } from "next/navigation";
+import SuccessCheckmark from "./SuccessCheckmark";
+import Loading from "./Loading";
 
 const SwapCrypto = () => {
   const dispatch = useDispatch();
@@ -18,6 +20,10 @@ const SwapCrypto = () => {
 
   const getUser = useSelector(userState);
   const { user } = getUser;
+
+  const [isLoader, setIsLoader] = useState<boolean>(true);
+  const [isTransactionSuccess, setIsTransactionSuccess] =
+    useState<boolean>(false);
 
   const [fromCrypto, setFromCrypto] = useState<string>("BTC");
   const [toCrypto, setToCrypto] = useState<string>("ETH");
@@ -131,8 +137,22 @@ const SwapCrypto = () => {
           );
 
           setRefetchUserData((prev) => prev + 1);
-          // Take user to the home page
-          router.push("/");
+
+          // Set Loader to true
+          setIsLoader(true);
+
+          // After 1 second, set the loader to false and set transaction success to true
+          setTimeout(() => {
+            // Set Loader to false
+            setIsLoader(false);
+            // Set transaction success to true
+            setIsTransactionSuccess(true);
+          }, 1000);
+
+          // After 1.5secs, take user to the home page
+          setTimeout(() => {
+            router.push("/");
+          }, 2000);
         }
       } else {
         console.log("You do not have selected currencies");
@@ -142,54 +162,69 @@ const SwapCrypto = () => {
     }
   };
 
+  // Set a loader for 0.5 seconds
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoader(false);
+    }, 500);
+  }, []);
+
   return (
     <section>
-      <div className="flex flex-col items-center gap-8">
-        <h1 className="font-semibold text-xl text-center mb-6">Swap crypto</h1>
-        <div className="w-full flex flex-col items-center gap-8">
-          <span className="w-full">
+      {isTransactionSuccess ? (
+        <SuccessCheckmark />
+      ) : isLoader ? (
+        <Loading />
+      ) : (
+        <div className="flex flex-col items-center gap-8">
+          <h1 className="font-semibold text-xl text-center mb-6">
+            Swap crypto
+          </h1>
+          <div className="w-full flex flex-col items-center gap-8">
+            <span className="w-full">
+              <SwapCryptoInput
+                type="from"
+                selectedCrypto={fromCrypto}
+                setSelectedCrypto={setFromCrypto}
+                placeholder="from"
+                onChange={onChange}
+                exchangeError={exchangeError}
+                refetchUserData={refetchUserData}
+              />
+              {error && (
+                <p className="text-red-500 text-sm">
+                  Insufficient crypto balance
+                </p>
+              )}
+            </span>
+            <button
+              type="button"
+              className="p-3 bg-blue-500 rounded-full"
+              onClick={switchCrypto}
+            >
+              <Image src="/swap.svg" width={15} height={15} alt="arrow" />
+            </button>
             <SwapCryptoInput
-              type="from"
-              selectedCrypto={fromCrypto}
-              setSelectedCrypto={setFromCrypto}
-              placeholder="from"
-              onChange={onChange}
-              exchangeError={exchangeError}
+              type="to"
+              selectedCrypto={toCrypto}
+              setSelectedCrypto={setToCrypto}
+              placeholder="to"
+              amountTo={amountTo}
               refetchUserData={refetchUserData}
             />
-            {error && (
-              <p className="text-red-500 text-sm">
-                Insufficient crypto balance
-              </p>
-            )}
-          </span>
+          </div>
           <button
             type="button"
-            className="p-3 bg-blue-500 rounded-full"
-            onClick={switchCrypto}
+            disabled={error || exchangeError}
+            className="w-full p-2 rounded-md text-white bg-blue-500 hover:bg-blue-600 transition disabled:cursor-not-allowed disabled:bg-gray-400"
+            onClick={convertCurrency}
           >
-            <Image src="/swap.svg" width={15} height={15} alt="arrow" />
+            {exchangeError
+              ? `Exchange rate not found for ${fromCrypto} to ${toCrypto}`
+              : `Buy ${toCrypto}`}
           </button>
-          <SwapCryptoInput
-            type="to"
-            selectedCrypto={toCrypto}
-            setSelectedCrypto={setToCrypto}
-            placeholder="to"
-            amountTo={amountTo}
-            refetchUserData={refetchUserData}
-          />
         </div>
-        <button
-          type="button"
-          disabled={error || exchangeError}
-          className="w-full p-2 rounded-md text-white bg-blue-500 hover:bg-blue-600 transition disabled:cursor-not-allowed disabled:bg-gray-400"
-          onClick={convertCurrency}
-        >
-          {exchangeError
-            ? `Exchange rate not found for ${fromCrypto} to ${toCrypto}`
-            : `Buy ${toCrypto}`}
-        </button>
-      </div>
+      )}
     </section>
   );
 };
