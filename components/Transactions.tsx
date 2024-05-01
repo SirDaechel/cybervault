@@ -1,21 +1,33 @@
+import Loading from "./Loading";
+
 type TransactionsProps = {
+  isTransactionLoader: boolean;
   transactions: string[];
 };
 
-const Transactions: React.FC<TransactionsProps> = ({ transactions }) => {
+const Transactions: React.FC<TransactionsProps> = ({
+  isTransactionLoader,
+  transactions,
+}) => {
   return (
     <section className="w-full flex flex-col gap-4 mt-2">
-      {transactions.length > 0 ? (
-        transactions.map((transaction, index) => (
-          <p
-            key={index}
-            className="w-full pb-4 border-b border-b-zinc-200 text-sm text-green-600"
-          >
-            {transaction}
-          </p>
-        ))
+      {isTransactionLoader ? (
+        <Loading classname="loader2" />
       ) : (
-        <p className="text-sm text-center">No transactions yet.</p>
+        <>
+          {transactions.length > 0 ? (
+            transactions.map((transaction, index) => (
+              <p
+                key={index}
+                className="w-full pb-4 border-b border-b-zinc-200 text-sm text-green-600"
+              >
+                {transaction}
+              </p>
+            ))
+          ) : (
+            <p className="text-sm text-center">No transactions yet.</p>
+          )}
+        </>
       )}
     </section>
   );
