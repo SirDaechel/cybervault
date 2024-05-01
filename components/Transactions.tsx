@@ -19,7 +19,7 @@ const Transactions: React.FC<TransactionsProps> = ({
             transactions.map((transaction, index) => (
               <p
                 key={index}
-                className="w-full pb-4 border-b border-b-zinc-200 text-sm text-green-600"
+                className="w-full pb-4 border-b border-b-zinc-200 text text-green-600"
               >
                 {transaction}
               </p>
