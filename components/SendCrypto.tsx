@@ -1,10 +1,10 @@
-import { setTransaction } from "@/libs/redux-state/features/transactions/transactionSlice";
+import { setSentTransaction } from "@/libs/redux-state/features/transactions/transactionSlice";
 import {
   setBalanceSend,
   userState,
 } from "@/libs/redux-state/features/user/userSlice";
-import { getCurrentDateAndTimeFormatted } from "@/libs/utils";
-import { useRouter } from "next/navigation";
+import { createURL, getCurrentDateAndTimeFormatted } from "@/libs/utils";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SuccessCheckmark from "./SuccessCheckmark";
@@ -21,6 +21,9 @@ const SendCrypto: React.FC<SendCryptoProps> = ({ currentCrypto }) => {
   const getUser = useSelector(userState);
   const { user } = getUser;
   const userBalances = user.balances;
+
+  const searchParams = useSearchParams();
+  const UrlSearchParams = new URLSearchParams(searchParams.toString());
 
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isTransactionSuccess, setIsTransactionSuccess] =
@@ -78,7 +81,7 @@ const SendCrypto: React.FC<SendCryptoProps> = ({ currentCrypto }) => {
       const dateTime = getCurrentDateAndTimeFormatted();
       // Set transaction message or notification
       dispatch(
-        setTransaction(
+        setSentTransaction(
           `You sent ${amount} ${currentCrypto}($${amountFiat.toFixed(
             2
           )}) to the address ${address} on ${dateTime}`
@@ -98,7 +101,11 @@ const SendCrypto: React.FC<SendCryptoProps> = ({ currentCrypto }) => {
 
       // After 1.5secs, take user to the home page
       setTimeout(() => {
-        router.push("/");
+        UrlSearchParams.set("transaction-type", "sent");
+        // Call the function that creates a URL string with the data from UrlSearchParams
+        const pageURL = createURL("/", UrlSearchParams);
+        // Push the created URL string to the URL
+        router.push(`${pageURL}`);
       }, 2000);
     } else {
       console.log("You do not have selected currencies");

@@ -3,14 +3,18 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import SwapCryptoInput from "./SwapCryptoInput";
 import Image from "next/image";
-import { getCurrentDateAndTimeFormatted, swapCurrencies } from "@/libs/utils";
+import {
+  createURL,
+  getCurrentDateAndTimeFormatted,
+  swapCurrencies,
+} from "@/libs/utils";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setBalanceSwap,
   userState,
 } from "@/libs/redux-state/features/user/userSlice";
-import { setTransaction } from "@/libs/redux-state/features/transactions/transactionSlice";
-import { useRouter } from "next/navigation";
+import { setSwappedTransaction } from "@/libs/redux-state/features/transactions/transactionSlice";
+import { useRouter, useSearchParams } from "next/navigation";
 import SuccessCheckmark from "./SuccessCheckmark";
 import Loading from "./Loading";
 
@@ -24,6 +28,9 @@ const SwapCrypto = () => {
   const [isLoader, setIsLoader] = useState<boolean>(true);
   const [isTransactionSuccess, setIsTransactionSuccess] =
     useState<boolean>(false);
+
+  const searchParams = useSearchParams();
+  const UrlSearchParams = new URLSearchParams(searchParams.toString());
 
   const [fromCrypto, setFromCrypto] = useState<string>("BTC");
   const [toCrypto, setToCrypto] = useState<string>("ETH");
@@ -131,7 +138,7 @@ const SwapCrypto = () => {
           const dateTime = getCurrentDateAndTimeFormatted();
           // Set transaction message or notification
           dispatch(
-            setTransaction(
+            setSwappedTransaction(
               `You swapped ${amountFrom} ${fromCrypto} to ${amountTo} ${toCrypto} on ${dateTime}`
             )
           );
@@ -151,7 +158,11 @@ const SwapCrypto = () => {
 
           // After 1.5secs, take user to the home page
           setTimeout(() => {
-            router.push("/");
+            UrlSearchParams.set("transaction-type", "swapped");
+            // Call the function that creates a URL string with the data from UrlSearchParams
+            const pageURL = createURL("/", UrlSearchParams);
+            // Push the created URL string to the URL
+            router.push(`${pageURL}`);
           }, 2000);
         }
       } else {

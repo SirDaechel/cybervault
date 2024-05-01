@@ -12,13 +12,13 @@ export const transactions = createSlice({
   initialState,
   reducers: {
     setReceivedTransaction: (state, action) => {
-      state.receivedTransactions.push(action.payload);
+      state.receivedTransactions.unshift(action.payload);
     },
     setSentTransaction: (state, action) => {
-      state.receivedTransactions.push(action.payload);
+      state.sentTransactions.unshift(action.payload);
     },
     setSwappedTransaction: (state, action) => {
-      state.receivedTransactions.push(action.payload);
+      state.swappedTransactions.unshift(action.payload);
     },
   },
 });

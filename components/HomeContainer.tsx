@@ -109,16 +109,6 @@ export const HomeContainer = () => {
               <button
                 type="button"
                 className={`px-3 py-1 bg-blue-200 text-blue-600 rounded text-center hover:bg-blue-600 hover:text-white transition text-sm ${
-                  currentTransactionType === "received" &&
-                  "bg-blue-500 text-white"
-                }`}
-                onClick={(e) => setTransactionType(e)}
-              >
-                Received
-              </button>
-              <button
-                type="button"
-                className={`px-3 py-1 bg-blue-200 text-blue-600 rounded text-center hover:bg-blue-600 hover:text-white transition text-sm ${
                   currentTransactionType === "sent" && "bg-blue-500 text-white"
                 }`}
                 onClick={(e) => setTransactionType(e)}
@@ -135,6 +125,16 @@ export const HomeContainer = () => {
               >
                 Swapped
               </button>
+              <button
+                type="button"
+                className={`px-3 py-1 bg-blue-200 text-blue-600 rounded text-center hover:bg-blue-600 hover:text-white transition text-sm ${
+                  currentTransactionType === "received" &&
+                  "bg-blue-500 text-white"
+                }`}
+                onClick={(e) => setTransactionType(e)}
+              >
+                Received
+              </button>
             </ul>
             <Transactions
               transactions={
@@ -142,7 +142,9 @@ export const HomeContainer = () => {
                   ? receivedTransactions
                   : currentTransactionType === "sent"
                   ? sentTransactions
-                  : swappedTransactions
+                  : currentTransactionType === "swapped"
+                  ? swappedTransactions
+                  : []
               }
             />
           </span>
